@@ -1,4 +1,4 @@
-GreenMine
+rmine.vim
 =========
 
 vim plugin for redmine.
