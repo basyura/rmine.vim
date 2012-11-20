@@ -46,10 +46,12 @@ function! s:load(issue)
     if !has_key(jnl, 'notes') || jnl.notes == ''
       continue
     endif
-    call append(line('$') , jnl.user.name)
+    call append(line('$'), jnl.user.name)
+    call append(line('$'), rmine#util#ljust('-', strwidth(jnl.user.name), '-'))
     for line in split(jnl.notes,"\n")
       call append(line('$') , '  ' . substitute(line , '' , '' , 'g'))
     endfor
+    call append(line('$'), '')
   endfor
 
   :0

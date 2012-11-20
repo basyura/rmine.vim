@@ -51,20 +51,13 @@ endfunction
 function! s:format(issue)
   let buf = a:issue.project.name . ' ' . 
           \ '#' . a:issue.id . ' ' . 
-          \ s:padding(a:issue.status.name, 8) . ' ' . 
+          \ rmine#util#ljust(a:issue.status.name, 8) . ' ' . 
           \ a:issue.author.name . ' ' . 
           \ a:issue.subject . ' ' . 
           \ rmine#util#format_date(a:issue.updated_on)
   return buf
 endfunction
 
-function! s:padding(msg, length)
-  let msg = a:msg
-  while len(msg) < a:length
-    let msg = msg . ' '
-  endwhile
-  return msg
-endfunction
 
 function! s:server_url()
   return substitute(g:unite_yarm_server_url , '/$' , '' , '')
