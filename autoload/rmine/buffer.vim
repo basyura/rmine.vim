@@ -9,7 +9,7 @@ function! rmine#buffer#load(issues)
     call s:bufMgr.open("rmine:issues", {'opener' : 'edit!' })
     call rmine#buffer#issues#load(a:issues)
   else
-    call s:bufMgr.open("rmine:" . a:issues.id . ' - ' . a:issues.subject)
+    call s:bufMgr.open("rmine:" . a:issues.id . ' - ' . a:issues.subject, {'opener' : 'edit!' })
     call rmine#buffer#issue#load(a:issues)
   endif
 endfunction
