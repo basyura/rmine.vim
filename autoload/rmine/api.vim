@@ -1,6 +1,10 @@
 
+function! rmine#api#versions(project_id)
+  return s:request('/projects/' . a:project_id . '/versions').versions
+endfunction
+
 function! rmine#api#projects()
-  return s:request('projects')
+  return s:request('projects').projects
 endfunction
 
 function! rmine#api#issues()
@@ -11,12 +15,32 @@ function! rmine#api#issue(no)
   return s:request('issues/' . a:no, {'include' : 'journals'}).issue
 endfunction
 
+function! rmine#api#users()
+  return s:request('users').users
+endfunction
+
+function! rmine#api#project_memberships(project_id)
+  return s:request('/projects/' . a:project_id . '/memberships').memberships
+endfunction
+
+function! rmine#api#trackers(project_id)
+  return s:request('/trackers').trackers
+endfunction
+
+function! rmine#api#queries(project_id)
+  return s:request('/queries').queries
+endfunction
+
+function! rmine#api#issue_statuses()
+  return s:request('/issue_statuses').issue_statuses
+endfunction
+
 
 function! s:request(path, ...)
   let path   = a:path =~ '^\/' ? a:path : '/' . a:path
   let option = a:0 > 0 ? a:1 : {}
 
-  if exists('g:unite_yarm_access_key')
+  if exists('g:rmine_access_key')
     let option['key'] = g:rmine_access_key
   endif
 
