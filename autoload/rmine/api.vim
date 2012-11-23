@@ -1,21 +1,22 @@
+let s:vital = vital#of('rmine.vim')
+let s:http  = s:vital.import('Web.Http')
+
 
 function! rmine#api#versions(project_id)
-  return s:request('projects/' . a:project_id . '/versions').versions
+  return s:get('projects/' . a:project_id . '/versions').versions
 endfunction
 
 function! rmine#api#projects()
-  return s:request('projects').projects
+  return s:get('projects').projects
 endfunction
 
 function! rmine#api#issues()
-  return s:request('issues').issues
+  return s:get('issues').issues
 endfunction
 
 function! rmine#api#issue(no)
-  return s:request('issues/' . a:no, {'include' : 'journals'}).issue
+  return s:get('issues/' . a:no, {'include' : 'journals'}).issue
 endfunction
-
-function! rmine#api#issue_post(json)
 "{
 "    "issue": {
 "      "project_id": "example",
@@ -25,6 +26,14 @@ function! rmine#api#issue_post(json)
 "      }
 "    }
 "}
+function! rmine#api#issue_post(project_id, subject, description, ...)
+  let ticket = {'issue' : {
+        \ 'project_id'  : a:project_id,
+        \ 'subject'     : a:subject,
+        \ 'description' : a:description
+        \ }}
+  call s:post('issues', ticket)
+
 endfunction
 
 function! rmine#api#issue_update(no, json)
@@ -34,44 +43,66 @@ function! rmine#api#issue_delete(no)
 endfunction
 
 function! rmine#api#issue_statuses()
-  return s:request('issue_statuses').issue_statuses
+  return s:get('issue_statuses').issue_statuses
 endfunction
 
 function! rmine#api#users()
-  return s:request('users').users
+  return s:get('users').users
 endfunction
 
 function! rmine#api#project_memberships(project_id)
-  return s:request('projects/' . a:project_id . '/memberships').memberships
+  return s:get('projects/' . a:project_id . '/memberships').memberships
 endfunction
 
 function! rmine#api#trackers(project_id)
-  return s:request('trackers').trackers
+  return s:get('trackers').trackers
 endfunction
 
 function! rmine#api#queries(project_id)
-  return s:request('queries').queries
+  return s:get('queries').queries
 endfunction
 
+function! s:get(path, ...)
+  return s:request('get', a:path, {}, a:0 > 0 ? a:1 : {})
+endfunction
 
+function! s:post(path, data, ...)
+  return s:request('post', a:path, a:data, a:0 > 0 ? a:1 : {})
+endfunction
 
-function! s:request(path, ...)
+function! s:put(path, data, ...)
+  return s:request('put', a:path, a:data, a:0 > 0 ? a:1 : {})
+endfunction
+
+function! s:request(method, path, data, option)
   let path   = a:path =~ '^\/' ? a:path : '/' . a:path
-  let option = a:0 > 0 ? a:1 : {}
+  let option = a:option
 
   if exists('g:rmine_access_key')
     let option['key'] = g:rmine_access_key
   endif
 
-  let ret = rmine#http#get(s:server_url() . path . '.json', option)
+  let url   = s:server_url() . path . '.json'
+  let param = webapi#http#encodeURI(option)
+  if strlen(param)
+    let url .= "?" . param
+  endif
+
+  if a:method == 'GET'
+    let ret = call('rmine#http#' . a:method, [url])
+  else
+    let data = webapi#json#encode(a:data)
+    let ret  = call('rmine#http#post', [url, data, {'Content-Type' : 'application/json'} , toupper(a:method)])
+  endif
 
   let status = substitute(ret.header[0], 'HTTP/1.\d ', '', '')
   let status = substitute(status, ' .*', '', '')
-  if status != '200'
+  if index(['200', '201'], status) < 0
     throw ret.header[0]
   endif
   return rmine#json#decode(ret.content)
 endfunction
+
 
 function! s:server_url()
   return substitute(g:rmine_server_url , '/$' , '' , '')
