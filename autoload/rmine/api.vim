@@ -1,6 +1,6 @@
 
 function! rmine#api#versions(project_id)
-  return s:request('/projects/' . a:project_id . '/versions').versions
+  return s:request('projects/' . a:project_id . '/versions').versions
 endfunction
 
 function! rmine#api#projects()
@@ -15,25 +15,44 @@ function! rmine#api#issue(no)
   return s:request('issues/' . a:no, {'include' : 'journals'}).issue
 endfunction
 
+function! rmine#api#issue_post(json)
+"{
+"    "issue": {
+"      "project_id": "example",
+"      "subject": "Test issue",
+"      "custom_field_values":{
+"        "1":"1.1.3"  #the affected version field
+"      }
+"    }
+"}
+endfunction
+
+function! rmine#api#issue_update(no, json)
+endfunction
+
+function! rmine#api#issue_delete(no)
+endfunction
+
+function! rmine#api#issue_statuses()
+  return s:request('issue_statuses').issue_statuses
+endfunction
+
 function! rmine#api#users()
   return s:request('users').users
 endfunction
 
 function! rmine#api#project_memberships(project_id)
-  return s:request('/projects/' . a:project_id . '/memberships').memberships
+  return s:request('projects/' . a:project_id . '/memberships').memberships
 endfunction
 
 function! rmine#api#trackers(project_id)
-  return s:request('/trackers').trackers
+  return s:request('trackers').trackers
 endfunction
 
 function! rmine#api#queries(project_id)
-  return s:request('/queries').queries
+  return s:request('queries').queries
 endfunction
 
-function! rmine#api#issue_statuses()
-  return s:request('/issue_statuses').issue_statuses
-endfunction
 
 
 function! s:request(path, ...)
