@@ -9,9 +9,13 @@ endfunction
 function! rmine#api#projects()
   return s:get('projects').projects
 endfunction
-
-function! rmine#api#issues()
-  return s:get('issues').issues
+"
+" project : all or project_id
+"
+function! rmine#api#issues(project, ...)
+  let param = a:0 > 0 ? a:1 : {}
+  let path  = a:project == 'all' ? 'issues' : 'projects/' . a:project . '/issues'
+  return s:get(path, param).issues
 endfunction
 
 function! rmine#api#issue(no)
@@ -26,24 +30,51 @@ endfunction
 "      }
 "    }
 "}
+"
+"{
+"   'issue': {
+"     'id'              : 67,
+"     'status_id'       : 1
+"     'author'          : {'id': 1, 'name': 'admin'},
+"     'tracker_id'      : 4
+"     'priority_id'     : 4
+"     'project_id'      : 1
+"     'done_ratio'      : 0,
+"     'subject'         : 'あ', 
+"     'description'     : 'いいいいいいいいいいいいい',
+"     'assigned_to_id'  : 1,
+"     'start_date'      : '2012-11-23',
+"     'due_date'        : '2012-11-24',
+"     'estimated_hours' : 10,
+"     'created_on'      : '2012-11-23T14:54:00Z',
+"     'updated_on'      : '2012-11-23T14:54:00Z'
+"     }
+"   }
 function! rmine#api#issue_post(project_id, subject, description, ...)
-  let ticket = {'issue' : {
+  let param = a:0 > 0 ? a:1 : {}
+  let issue = {
         \ 'project_id'  : a:project_id,
         \ 'subject'     : a:subject,
         \ 'description' : a:description
-        \ }}
-  call s:post('issues', ticket)
-
+        \ }
+  let issue = extend(issue, param)
+  return s:post('issues', {'issue' : issue})
 endfunction
 
-function! rmine#api#issue_update(no, json)
+function! rmine#api#issue_update(no, param)
+  return s:put('issues/' . a:no, {'issue' : a:param})
 endfunction
 
 function! rmine#api#issue_delete(no)
+  return s:delete('issues/' . a:no)
 endfunction
 
 function! rmine#api#issue_statuses()
   return s:get('issue_statuses').issue_statuses
+endfunction
+
+function! rmine#api#issue_priorities()
+  return s:get('enumerations/issue_priorities').issue_priorities
 endfunction
 
 function! rmine#api#users()
@@ -54,11 +85,11 @@ function! rmine#api#project_memberships(project_id)
   return s:get('projects/' . a:project_id . '/memberships').memberships
 endfunction
 
-function! rmine#api#trackers(project_id)
+function! rmine#api#trackers()
   return s:get('trackers').trackers
 endfunction
 
-function! rmine#api#queries(project_id)
+function! rmine#api#queries()
   return s:get('queries').queries
 endfunction
 
@@ -72,6 +103,10 @@ endfunction
 
 function! s:put(path, data, ...)
   return s:request('put', a:path, a:data, a:0 > 0 ? a:1 : {})
+endfunction
+
+function! s:delete(path)
+  return s:request('delete', a:path, {}, {})
 endfunction
 
 function! s:request(method, path, data, option)
@@ -100,7 +135,13 @@ function! s:request(method, path, data, option)
   if index(['200', '201'], status) < 0
     throw ret.header[0]
   endif
-  return rmine#json#decode(ret.content)
+
+  " put or delete
+  if ret.content == ' '
+    return 1
+  else
+    return rmine#json#decode(ret.content)
+  endif
 endfunction
 
 
