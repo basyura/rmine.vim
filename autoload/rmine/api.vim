@@ -124,10 +124,10 @@ function! s:request(method, path, data, option)
   endif
 
   if a:method == 'GET'
-    let ret = call('rmine#http#' . a:method, [url])
+    let ret = webapi#http#get(url)
   else
     let data = webapi#json#encode(a:data)
-    let ret  = call('rmine#http#post', [url, data, {'Content-Type' : 'application/json'} , toupper(a:method)])
+    let ret  = webapi#http#post(url, data, {'Content-Type' : 'application/json'} , toupper(a:method))
   endif
 
   let status = substitute(ret.header[0], 'HTTP/1.\d ', '', '')
@@ -140,7 +140,7 @@ function! s:request(method, path, data, option)
   if ret.content == ' '
     return 1
   else
-    return rmine#json#decode(ret.content)
+    return webapi#json#decode(ret.content)
   endif
 endfunction
 
