@@ -14,6 +14,12 @@ function! rmine#buffer#load(issues)
   endif
 endfunction
 
+function! rmine#buffer#new_issue()
+  call s:bufMgr.open("rmine:issue_new", {'opener' : 'edit!' })
+  call rmine#buffer#issue_new#load()
+endfunction
+
+
 function! rmine#buffer#note()
   try
     if &filetype != 'rmine_issue'

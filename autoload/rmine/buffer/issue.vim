@@ -8,7 +8,6 @@ endfunction
 function! s:pre_process()
   setlocal noswapfile
   setlocal modifiable
-  setlocal nolist
   setlocal buftype=nofile
   call s:define_default_key_mappings()
   setfiletype rmine_issue
@@ -24,6 +23,7 @@ function! s:load(issue)
 
   call append(0, header + desc + ['-----------------------------------------------------------------------'] + notes)
   delete _
+  call rmine#util#clear_undo()
   :0
 endfunction
 
@@ -69,8 +69,9 @@ function! s:create_notes(issue)
     if !has_key(jnl, 'notes') || jnl.notes == ''
       continue
     endif
-    call add(notes, jnl.user.name)
-    call add(notes, rmine#util#ljust('-', strwidth(jnl.user.name), '-'))
+    let name = jnl.user.name . ' - ' . jnl.created_on
+    call add(notes, name)
+    call add(notes, rmine#util#ljust('-', strwidth(name), '-'))
     for line in split(jnl.notes,"\n")
       call add(notes , '  ' . substitute(line , '' , '' , 'g'))
     endfor

@@ -19,3 +19,13 @@ function! rmine#util#ljust(msg, length, ...)
   endwhile
   return msg
 endfunction
+
+
+function! rmine#util#clear_undo()
+  let old_undolevels = &undolevels
+  setlocal undolevels=-1
+  execute "normal a \<BS>\<Esc>"
+  let &l:undolevels = old_undolevels
+  unlet old_undolevels
+endfunction
+

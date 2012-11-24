@@ -30,6 +30,7 @@ function! s:load(issues)
     call append(line('$') - 1, s:format(issue))
     call append(line('$') - 1, separator)
   endfor
+  call rmine#util#clear_undo()
   call cursor(1,1)
 endfunction
 
