@@ -16,46 +16,68 @@ function! s:pre_process()
 endfunction
 
 function! s:load(issue)
-  let issue = a:issue
-  let b:rmine_cache = issue
-  let title = '[rmine] - ' . issue.project.name . '  #' . issue.id . ' ' . issue.subject
+  let b:rmine_cache = a:issue
 
+  let header = s:create_header(a:issue)
+  let desc   = s:create_description(a:issue)
+  let notes  = s:create_notes(a:issue)
+
+  call append(0, header + desc + ['-----------------------------------------------------------------------'] + notes)
+  delete _
   :0
+endfunction
 
-  call append(line('$') , title)
-  call append(line('$') , tweetvim#util#separator('~'))
-  call append(line('$') , 'author     : ' . issue.author.name)
-  call append(line('$') , 'tracker    : ' . issue.tracker.name)
-  call append(line('$') , 'priority   : ' . issue.priority.name)
-  call append(line('$') , 'start_date : ' . issue.start_date)
-  call append(line('$') , 'created_on : ' . rmine#util#format_date(issue.created_on))
-  call append(line('$') , 'updated_on : ' . rmine#util#format_date(issue.updated_on))
-  call append(line('$') , 'done_ratio : ' . issue.done_ratio)
-  call append(line('$') , '')
-  for line in split(a:issue.description,"\n")
+function! s:create_header(issue)
+  let issue = a:issue
+  let title = '[rmine] - ' . issue.project.name . '  #' . issue.id . ' ' . issue.subject
+  let header = [
+        \ title,
+        \ tweetvim#util#separator('~'),
+        \ 'author      : ' . issue.author.name,
+        \ 'assigned_to : ' . get(issue, 'assigned_to', {'name' : ''}).name,
+        \ 'status      : ' . issue.status.name,
+        \ 'tracker     : ' . issue.tracker.name,
+        \ 'priority    : ' . issue.priority.name,
+        \ 'start_date  : ' . issue.start_date,
+        \ 'done_ratio  : ' . issue.done_ratio,
+        \ 'created_on  : ' . rmine#util#format_date(issue.created_on),
+        \ 'updated_on  : ' . rmine#util#format_date(issue.updated_on),
+        \ '',
+        \ ]
+  
+  return header
+endfunction
+
+function! s:create_description(issue)
+  let issue = a:issue
+  let desc = []
+  for line in split(issue.description,"\n")
     let line = substitute(line , '' , '' , 'g')
     if line !~ "^h2\."
       let line = '  ' . line
     endif
-    call append(line('$') , line)
+    call add(desc , line)
   endfor
 
-  call append(line('$') , '-----------------------------------------------------------------------')
+  return desc
+endfunction
 
+function! s:create_notes(issue)
+  let issue = a:issue
+  let notes = []
   for jnl in issue.journals
     if !has_key(jnl, 'notes') || jnl.notes == ''
       continue
     endif
-    call append(line('$'), jnl.user.name)
-    call append(line('$'), rmine#util#ljust('-', strwidth(jnl.user.name), '-'))
+    call add(notes, jnl.user.name)
+    call add(notes, rmine#util#ljust('-', strwidth(jnl.user.name), '-'))
     for line in split(jnl.notes,"\n")
-      call append(line('$') , '  ' . substitute(line , '' , '' , 'g'))
+      call add(notes , '  ' . substitute(line , '' , '' , 'g'))
     endfor
-    call append(line('$'), '')
+    call add(notes, '')
   endfor
 
-  :0
-  delete _
+  return notes
 endfunction
 
 
@@ -64,7 +86,6 @@ function! s:define_default_key_mappings()
     nnoremap <silent> <buffer> <leader>r :call rmine#issue(b:rmine_cache.id)<CR>
     nnoremap <silent> <buffer> <C-f> :call rmine#issue(b:rmine_cache.id - 1)<CR>
     nnoremap <silent> <buffer> <C-b> :call rmine#issue(b:rmine_cache.id + 1)<CR>
+    nnoremap <silent> <buffer> <Leader>s :call rmine#buffer#note()<CR>
   augroup END
 endfunction
-
-

@@ -1,8 +1,8 @@
 
 
-function! rmine#issues()
+function! rmine#issues(project)
   let limit = 20
-  let issues = rmine#api#issues()
+  let issues = rmine#api#issues(a:project)
   call rmine#buffer#load(issues)
 endfunction
 

@@ -13,3 +13,20 @@ function! rmine#buffer#load(issues)
     call rmine#buffer#issue#load(a:issues)
   endif
 endfunction
+
+function! rmine#buffer#note()
+  try
+    if &filetype != 'rmine_issue'
+      return
+    endif
+    let cache = b:rmine_cache
+    split
+    wincmd j
+    execute '10 wincmd _'
+    call s:bufMgr.open("rmine:note", {'opener' : 'split'})
+    let b:rmine_cache = cache
+    call rmine#buffer#note#load()
+  catch
+    echo v:exception
+  endtry
+endfunction

@@ -93,6 +93,8 @@ function! rmine#api#queries()
   return s:get('queries').queries
 endfunction
 
+"-------------- private -----------------
+
 function! s:get(path, ...)
   return s:request('get', a:path, {}, a:0 > 0 ? a:1 : {})
 endfunction
