@@ -39,6 +39,7 @@ function! s:create_header(issue)
         \ 'tracker     : ' . issue.tracker.name,
         \ 'priority    : ' . issue.priority.name,
         \ 'start_date  : ' . issue.start_date,
+        \ 'due_date    : ' . get(issue, 'due_date', ''),
         \ 'done_ratio  : ' . issue.done_ratio,
         \ 'created_on  : ' . rmine#util#format_date(issue.created_on),
         \ 'updated_on  : ' . rmine#util#format_date(issue.updated_on),
