@@ -1,9 +1,10 @@
 
 function! rmine#buffer#note#load()
-  call s:append_expalin()
   call s:buffer_setting()
+  call s:append_expalin()
   call s:define_default_key_mappings()
   let &filetype = 'rmine_note'
+  call rmine#util#clear_undo()
   startinsert!
 endfunction
 
@@ -16,7 +17,6 @@ endfunction
 function! s:buffer_setting()
   setlocal noswapfile
   setlocal buftype=acwrite
-  call rmine#util#clear_undo()
   setlocal nomodified
 endfunction
 
