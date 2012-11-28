@@ -1,5 +1,6 @@
 
 let s:convert_map = {
+      \ 'project'     : 'project_id',
       \ 'assigned_to' : 'assigned_to_id',
       \ 'status'      : 'status_id',
       \ 'tracker'     : 'tracker_id',
@@ -61,7 +62,8 @@ function! s:post_issue()
     let pair = split(line, '\s\{0,}:\s\{0,}')
     " changed field only
     if len(pair) > 1
-      let issue[s:convert_key(pair[0])] = s:convert_value(pair[1])
+      let converted_key = s:convert_key(pair[0])
+      let issue[converted_key] = s:convert_value(converted_key, pair[1])
     endif
     execute "normal! \<Down>"
     if line =~ '^$' || line('.') == line('$')
@@ -69,24 +71,25 @@ function! s:post_issue()
     endif
   endwhile
   
-  "let issue.description = join(getline('.', '$'), '\n')
-
-  let description = join(getline('.', '$') , '') . ''
-  "let description = iconv(body , &enc , 'utf-8')
-  let issue.description = description
-  
-  for key in ['project', 'subject']
+  for key in ['project_id', 'subject']
     if !s:check_blank(issue, key)
       echohl Error | echo key . ' is blank' | echohl None
       return
     endif
   endfor
 
-  let project  = remove(issue, 'project')
+  let project  = remove(issue, 'project_id')
   let subject  = remove(issue, 'subject')
-  let desc     = remove(issue, 'description')
+  let desc     = join(getline('.', '$') , '') . ''
 
-  let res     = rmine#api#issue_post(project, subject, desc, issue)
+  let ret = input('post new issue ? (y/n) : ')
+  if ret != 'y'
+    redraw
+    echohl Error | echo 'canceled' | echohl None
+    return
+  endif
+
+  let res = rmine#api#issue_post(project, subject, desc, issue)
   bd!
   call rmine#issue(res.issue.id)
 endfunction
@@ -105,6 +108,12 @@ function! s:convert_key(key)
   return a:key
 endfunction
 
-function! s:convert_value(value)
-  return substitute(a:value, ' .*', '', '')
+function! s:convert_value(key, value)
+  if a:key =~ 'id$'
+    " trim to id only
+    return substitute(a:value, ' .*', '', '')
+  else
+    " trim tail space
+    return substitute(a:value, ' *$', '', '')
+  endif
 endfunction

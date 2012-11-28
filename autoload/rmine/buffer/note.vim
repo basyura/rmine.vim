@@ -23,6 +23,7 @@ endfunction
 function! s:post_note()
   let ret = input('post note ? (y/n) : ')
   if ret != 'y'
+    redraw
     echohl Error | echo 'canceled' | echohl None
     return
   endif
