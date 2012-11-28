@@ -69,7 +69,11 @@ function! s:post_issue()
     endif
   endwhile
   
-  let issue.description = join(getline('.', '$'), '\n')
+  "let issue.description = join(getline('.', '$'), '\n')
+
+  let description = join(getline('.', '$') , '') . ''
+  "let description = iconv(body , &enc , 'utf-8')
+  let issue.description = description
   
   for key in ['project', 'subject']
     if !s:check_blank(issue, key)
