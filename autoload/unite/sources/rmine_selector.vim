@@ -69,6 +69,7 @@ function! s:source.action_table.execute.func(candidate)
   let line = substitute(a:candidate.source__line, ':.*', '', '') . ': ' . id . ' # ' . name
   call append('.', line)
   delete _
+  execute "normal! \<Down>\<End>"
 endfunction
 
 function! unite#sources#rmine_selector#id_sort(i1, i2)

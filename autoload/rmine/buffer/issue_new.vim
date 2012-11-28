@@ -8,6 +8,7 @@ let s:convert_map = {
       \ }
 
 function! rmine#buffer#issue_new#load()
+  silent %delete _
   call s:append_tempate()
   call s:buffer_setting()
   call s:define_default_key_mappings()

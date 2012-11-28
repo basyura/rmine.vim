@@ -1,5 +1,6 @@
 
 function! rmine#buffer#note#load()
+  silent %delete _
   call s:buffer_setting()
   call s:append_expalin()
   call s:define_default_key_mappings()
