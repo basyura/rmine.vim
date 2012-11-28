@@ -21,7 +21,7 @@ function! s:load(issue)
   let desc   = s:create_description(a:issue)
   let notes  = s:create_notes(a:issue)
 
-  call append(0, header + desc + ['-----------------------------------------------------------------------'] + notes)
+  call append(0, header + desc + ['', '', '<< comments >>', ''] + notes)
   delete _
   call rmine#util#clear_undo()
   :0
@@ -32,7 +32,7 @@ function! s:create_header(issue)
   let title = '[rmine] - ' . issue.project.name . '  #' . issue.id . ' ' . issue.subject
   let header = [
         \ title,
-        \ tweetvim#util#separator('~'),
+        \ '',
         \ 'author      : ' . issue.author.name,
         \ 'assigned_to : ' . get(issue, 'assigned_to', {'name' : ''}).name,
         \ 'status      : ' . issue.status.name,
@@ -72,7 +72,7 @@ function! s:create_notes(issue)
     endif
     let name = jnl.user.name . ' - ' . jnl.created_on
     call add(notes, name)
-    call add(notes, rmine#util#ljust('-', strwidth(name), '-'))
+    "call add(notes, rmine#util#ljust('~', strwidth(name), '~'))
     for line in split(jnl.notes,"\n")
       call add(notes , '  ' . substitute(line , '' , '' , 'g'))
     endfor

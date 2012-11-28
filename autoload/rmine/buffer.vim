@@ -26,9 +26,10 @@ function! rmine#buffer#note()
       return
     endif
     let cache = b:rmine_cache
-    split
-    wincmd j
-    execute '10 wincmd _'
+    vsplit
+    "split
+    "wincmd j
+    "execute '30 wincmd _'
     call s:bufMgr.open("rmine:note", {'opener' : 'split'})
     let b:rmine_cache = cache
     call rmine#buffer#note#load()
