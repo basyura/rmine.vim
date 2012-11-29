@@ -1,8 +1,13 @@
 
 
-function! rmine#issues(project)
-  let issues = rmine#api#issues(a:project, {'limit' : 100})
+function! rmine#issues(project, ...)
+  let param = a:0 > 0 ? a:1 : {}
+  if !has_key(param, 'limit')
+    let param.limit = 100
+  endif
+  let issues = rmine#api#issues(a:project, param)
   call rmine#buffer#load(issues)
+  let b:rmine_project = a:project
 endfunction
 
 function! rmine#issue(no)

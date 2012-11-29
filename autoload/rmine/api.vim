@@ -6,8 +6,12 @@ function! rmine#api#versions(project_id)
   return s:get('projects/' . a:project_id . '/versions').versions
 endfunction
 
-function! rmine#api#projects()
+function! rmine#api#projects(...)
   return s:get('projects').projects
+endfunction
+
+function! rmine#api#project(id)
+  return s:get('projects/' . a:id).project
 endfunction
 "
 " project : all or project_id
