@@ -40,6 +40,7 @@ function! s:define_default_key_mappings()
     nnoremap <silent> <buffer> <CR>      :call <SID>open_issue()<CR>
     nnoremap <silent> <buffer> <leader>r :Rmine<CR>
     nnoremap <silent> <buffer> <leader>p :Unite rmine/project<CR>
+    nnoremap <silent> <buffer> <leader>q :Unite rmine/query<CR>
   augroup END
 endfunction
 
