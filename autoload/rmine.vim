@@ -10,5 +10,11 @@ function! rmine#issue(no)
   call rmine#buffer#load(issue)
 endfunction
 
-function! rmine#projects()
+function! rmine#open_browser(no)
+  let url = s:server_url() . '/issues/' . a:no
+  execute "OpenBrowser " . url
+endfunction
+
+function! s:server_url()
+  return substitute(g:rmine_server_url , '/$' , '' , '')
 endfunction

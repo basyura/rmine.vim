@@ -72,7 +72,7 @@ function! s:create_notes(issue)
     endif
     let name = jnl.user.name . ' - ' . jnl.created_on
     call add(notes, name)
-    "call add(notes, rmine#util#ljust('~', strwidth(name), '~'))
+    call add(notes, rmine#util#ljust('~', strwidth(name), '~'))
     for line in split(jnl.notes,"\n")
       call add(notes , '  ' . substitute(line , '' , '' , 'g'))
     endfor
@@ -82,12 +82,12 @@ function! s:create_notes(issue)
   return notes
 endfunction
 
-
 function! s:define_default_key_mappings()
   augroup rmine_issue
     nnoremap <silent> <buffer> <leader>r :call rmine#issue(b:rmine_cache.id)<CR>
     nnoremap <silent> <buffer> <C-f> :call rmine#issue(b:rmine_cache.id - 1)<CR>
     nnoremap <silent> <buffer> <C-b> :call rmine#issue(b:rmine_cache.id + 1)<CR>
     nnoremap <silent> <buffer> <Leader>s :call rmine#buffer#note()<CR>
+    nnoremap <silent> <buffer> <Leader>b :call rmine#open_browser(b:rmine_cache.id)<CR>
   augroup END
 endfunction

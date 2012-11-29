@@ -53,7 +53,7 @@ function! s:format(issue)
   let buf = a:issue.project.name . ' ' . 
           \ '#' . a:issue.id . ' ' . 
           \ rmine#util#ljust(a:issue.status.name, 8) . ' ' . 
-          \ a:issue.author.name . ' ' . 
+          \ rmine#util#ljust((has_key(a:issue, 'assigned_to') ? a:issue.assigned_to.name : '') , 15)  . ' ' . 
           \ a:issue.subject . ' ' . 
           \ rmine#util#format_date(a:issue.updated_on)
   return buf
