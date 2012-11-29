@@ -4,10 +4,10 @@ let s:bufMgr = vital#of('rmine.vim').import('Vim.BufferManager').new()
 
 let s:last_bufnr = 0
 
-function! rmine#buffer#load(issues)
+function! rmine#buffer#load(project, issues)
   if type(a:issues) == 3
     call s:bufMgr.open("rmine:issues", {'opener' : 'edit!' })
-    call rmine#buffer#issues#load(a:issues)
+    call rmine#buffer#issues#load(a:project, a:issues)
   else
     call s:bufMgr.open("rmine:" . a:issues.id . ' - ' . a:issues.subject, {'opener' : 'edit!' })
     call rmine#buffer#issue#load(a:issues)

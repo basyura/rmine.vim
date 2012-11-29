@@ -6,13 +6,12 @@ function! rmine#issues(project, ...)
     let param.limit = 100
   endif
   let issues = rmine#api#issues(a:project, param)
-  call rmine#buffer#load(issues)
-  let b:rmine_project = a:project
+  call rmine#buffer#load(a:project, issues)
 endfunction
 
 function! rmine#issue(no)
   let issue = rmine#api#issue(a:no)
-  call rmine#buffer#load(issue)
+  call rmine#buffer#load('', issue)
 endfunction
 
 function! rmine#open_browser(no)

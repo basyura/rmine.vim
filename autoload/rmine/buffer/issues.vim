@@ -1,8 +1,9 @@
 " issues
 
-function! rmine#buffer#issues#load(issues)
-    call s:pre_process()
-    call s:load(a:issues)
+function! rmine#buffer#issues#load(project, issues)
+  let b:rmine_project = a:project
+  call s:pre_process()
+  call s:load(a:issues)
 endfunction
 
 function! s:pre_process()
@@ -17,7 +18,7 @@ endfunction
 
 function! s:load(issues)
   let b:redmine_cache = {}
-  let title = '[rmine]'
+  let title = '[rmine] ' . b:rmine_project
 
   :0
 
@@ -50,8 +51,12 @@ function! s:open_issue()
 endfunction
 
 function! s:format(issue)
-  let buf = a:issue.project.name . ' ' . 
-          \ '#' . a:issue.id . ' ' . 
+  let buf = ''
+  if b:rmine_project == 'all'
+    let buf .= a:issue.project.name . ' '
+  endif
+
+  let buf .= '#' . rmine#util#ljust(a:issue.id, 4) . ' ' . 
           \ rmine#util#ljust(a:issue.status.name, 8) . ' ' . 
           \ rmine#util#ljust((has_key(a:issue, 'assigned_to') ? a:issue.assigned_to.name : '') , 15)  . ' ' . 
           \ a:issue.subject . ' ' . 
