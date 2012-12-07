@@ -9,6 +9,11 @@ function! rmine#issues(project, ...)
   call rmine#buffer#load(a:project, issues)
 endfunction
 
+function! rmine#issues_command(...)
+  let project = a:0 > 0 ? a:1 : 'all'
+  call rmine#issues(project)
+endfunction
+
 function! rmine#issue(no)
   let issue = rmine#api#issue(a:no)
   call rmine#buffer#load('', issue)
