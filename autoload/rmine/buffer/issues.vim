@@ -41,6 +41,8 @@ function! s:define_default_key_mappings()
     nnoremap <silent> <buffer> <leader>r :Rmine<CR>
     nnoremap <silent> <buffer> <leader>p :Unite rmine/project<CR>
     nnoremap <silent> <buffer> <leader>q :Unite rmine/query<CR>
+    nnoremap <silent> <buffer> j :call <SID>cursor_down()<CR>
+    nnoremap <silent> <buffer> k :call <SID>cursor_up()<CR>
   augroup END
 endfunction
 
@@ -69,4 +71,27 @@ endfunction
 
 function! s:server_url()
   return substitute(g:unite_yarm_server_url , '/$' , '' , '')
+endfunction
+
+function! s:cursor_down()
+  while 1
+    :execute "normal! \<Down>"
+    if getline(".") !~ '^  ' && (!s:isCursorOnSeprator() || line(".") == line("$"))
+      break
+    endif
+  endwhile
+endfunction
+
+function! s:cursor_up()
+  while 1
+    :execute "normal! \<Up>"
+    if !s:isCursorOnSeprator() || line(".") == 1
+      break
+    endif
+  endwhile
+endfunction
+
+function! s:isCursorOnSeprator()
+  let name = synIDattr(synID(line('.'),col('.'),1),'name')
+  return name == 'rmine_issues_separator' || name == 'rmine_issues_separator_title'
 endfunction
