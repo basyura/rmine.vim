@@ -38,7 +38,7 @@ endfunction
 function! s:define_default_key_mappings()
   augroup rmine_issues
     nnoremap <silent> <buffer> <CR>      :call <SID>open_issue()<CR>
-    nnoremap <silent> <buffer> <leader>r :Rmine<CR>
+    nnoremap <silent> <buffer> <leader>r :call rmine#issues(b:rmine_project)<CR>
     nnoremap <silent> <buffer> <leader>p :Unite rmine/project<CR>
     nnoremap <silent> <buffer> <leader>q :Unite rmine/query<CR>
     nnoremap <silent> <buffer> j :call <SID>cursor_down()<CR>
