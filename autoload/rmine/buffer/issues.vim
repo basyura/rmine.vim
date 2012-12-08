@@ -63,6 +63,7 @@ function! s:format(issue)
   let buf .= '#' . rmine#util#ljust(a:issue.id, 4) . ' ' . 
           \ rmine#util#ljust(a:issue.status.name, 8) . ' ' . 
           \ rmine#util#ljust((has_key(a:issue, 'assigned_to') ? a:issue.assigned_to.name : '') , 15)  . ' ' . 
+          \ rmine#util#ljust(get(a:issue, 'due_date',''), 12) . ' ' . 
           \ a:issue.subject . ' ' . 
           \ '[[' . rmine#util#format_date(a:issue.updated_on) . ']]'
   return buf
