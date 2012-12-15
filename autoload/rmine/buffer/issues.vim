@@ -32,6 +32,7 @@ function! s:load(issues)
     call append(line('$') - 1, separator)
   endfor
   call rmine#util#clear_undo()
+  call s:apply_syntax()
   call cursor(1,1)
 endfunction
 
@@ -69,6 +70,15 @@ function! s:format(issue)
   return buf
 endfunction
 
+function! s:apply_syntax()
+  let statuses = rmine#api#issue_statuses()  
+  for status in statuses
+    if status.id == 1
+      continue
+    endif
+    execute "syntax match rmine_issue_status_" . status.id . " '" . status.name . "'"
+  endfor
+endfunction
 
 function! s:server_url()
   return substitute(g:unite_yarm_server_url , '/$' , '' , '')

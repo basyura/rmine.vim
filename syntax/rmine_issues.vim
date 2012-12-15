@@ -15,3 +15,12 @@ highlight default rmine_issues_separator_title guifg=#444444
 
 highlight default rmine_appendix         guifg=#616161
 
+highlight default link rmine_issue_status_1 Normal
+highlight default link rmine_issue_status_2 Visual
+highlight default link rmine_issue_status_3 Todo
+highlight default link rmine_issue_status_4 NonText
+highlight default link rmine_issue_status_5 Normal
+highlight default link rmine_issue_status_6 Normal
+highlight default link rmine_issue_status_7 Normal
+highlight default link rmine_issue_status_8 Normal
+highlight default link rmine_issue_status_9 Normal

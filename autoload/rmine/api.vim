@@ -1,6 +1,7 @@
 let s:vital = vital#of('rmine.vim')
 let s:http  = s:vital.import('Web.Http')
 
+let s:cache = {}
 
 function! rmine#api#versions(project_id)
   return s:get('projects/' . a:project_id . '/versions').versions
@@ -74,7 +75,13 @@ function! rmine#api#issue_delete(no)
 endfunction
 
 function! rmine#api#issue_statuses()
-  return s:get('issue_statuses').issue_statuses
+  let statuses = get(s:cache, 'issue_statuses', [])
+  if !empty(statuses)
+    return copy(statuses)
+  endif
+  let statuses = s:get('issue_statuses').issue_statuses
+  let s:cache['issue_statuses'] = statuses
+  return statuses
 endfunction
 
 function! rmine#api#issue_priorities()
