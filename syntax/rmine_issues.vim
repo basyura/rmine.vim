@@ -30,3 +30,5 @@ highlight default link rmine_issue_priority_4 Normal
 highlight default link rmine_issue_priority_5 Constant
 highlight default link rmine_issue_priority_6 WarningMsg
 highlight default link rmine_issue_priority_7 ErrorMsg
+
+highlight default link rmine_issue_current_user Type

@@ -25,12 +25,23 @@ function! s:load(issues)
   call append(0, title)
   call append(1, tweetvim#util#separator('~'))
 
-  let separator = tweetvim#util#separator('-')
+  let separator    = tweetvim#util#separator('-')
+  let current_user = rmine#api#current_user()
+  let apply_current_user = 0
   for issue in a:issues
     let b:redmine_cache[line(".")] = issue
     call append(line('$') - 1, s:format(issue))
     call append(line('$') - 1, separator)
     execute "syntax match rmine_issue_priority_" . issue.priority.id . " '\\zs#" . issue.id  ."\\ze '"
+    if !apply_current_user
+      let assigned_to = get(issue, 'assigned_to', {})
+      if !empty(assigned_to)
+        if assigned_to.id == current_user.id
+          execute "syntax match rmine_issue_current_user '" . assigned_to.name  . "'"
+          let apply_current_user = 1
+        endif
+      endif
+    endif
   endfor
   call rmine#util#clear_undo()
   call s:apply_syntax()
