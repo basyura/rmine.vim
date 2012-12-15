@@ -30,6 +30,7 @@ function! s:load(issues)
     let b:redmine_cache[line(".")] = issue
     call append(line('$') - 1, s:format(issue))
     call append(line('$') - 1, separator)
+    execute "syntax match rmine_issue_priority_" . issue.priority.id . " '\\zs#" . issue.id  ."\\ze '"
   endfor
   call rmine#util#clear_undo()
   call s:apply_syntax()
@@ -73,9 +74,6 @@ endfunction
 function! s:apply_syntax()
   let statuses = rmine#api#issue_statuses()  
   for status in statuses
-    if status.id == 1
-      continue
-    endif
     execute "syntax match rmine_issue_status_" . status.id . " '" . status.name . "'"
   endfor
 endfunction

@@ -92,6 +92,10 @@ function! rmine#api#users()
   return s:get('users').users
 endfunction
 
+function! rmine#api#current_user()
+  return s:get('users/current').user
+endfunction
+
 function! rmine#api#project_memberships(project_id)
   return s:get('projects/' . a:project_id . '/memberships').memberships
 endfunction
