@@ -17,7 +17,7 @@ function! s:pre_process()
 endfunction
 
 function! s:load(issues)
-  let b:redmine_cache = {}
+  let b:rmine_cache = {}
   let title = '[rmine] ' . b:rmine_project
 
   :0
@@ -29,7 +29,7 @@ function! s:load(issues)
   let current_user = rmine#api#current_user()
   let apply_current_user = 0
   for issue in a:issues
-    let b:redmine_cache[line(".")] = issue
+    let b:rmine_cache[line(".")] = issue
     call append(line('$') - 1, s:format(issue))
     call append(line('$') - 1, separator)
     execute "syntax match rmine_issue_priority_" . issue.priority.id . " '\\zs#" . issue.id  ."\\ze '"
@@ -60,10 +60,10 @@ function! s:define_default_key_mappings()
 endfunction
 
 function! s:open_issue()
-  if !has_key(b:redmine_cache, line("."))
+  if !has_key(b:rmine_cache, line("."))
     return
   endif
-  let no = b:redmine_cache[line(".")].id
+  let no = b:rmine_cache[line(".")].id
   call rmine#issue(no)
 endfunction
 
