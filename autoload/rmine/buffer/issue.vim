@@ -38,8 +38,8 @@ function! s:create_header(issue)
         \ 'status      : ' . issue.status.name,
         \ 'tracker     : ' . issue.tracker.name,
         \ 'priority    : ' . issue.priority.name,
-        \ 'start_date  : ' . issue.start_date,
-        \ 'due_date    : ' . get(issue, 'due_date', ''),
+        \ 'start_date  : ' . get(issue, 'start_date', ''),
+        \ 'due_date    : ' . get(issue, 'due_date'  , ''),
         \ 'done_ratio  : ' . issue.done_ratio,
         \ 'created_on  : ' . rmine#util#format_date(issue.created_on),
         \ 'updated_on  : ' . rmine#util#format_date(issue.updated_on),
@@ -85,8 +85,8 @@ endfunction
 function! s:define_default_key_mappings()
   augroup rmine_issue
     nnoremap <silent> <buffer> <leader>r :call rmine#issue(b:rmine_cache.id)<CR>
-    nnoremap <silent> <buffer> <C-f> :call rmine#issue(b:rmine_cache.id - 1)<CR>
-    nnoremap <silent> <buffer> <C-b> :call rmine#issue(b:rmine_cache.id + 1)<CR>
+    "nnoremap <silent> <buffer> <C-f> :call rmine#issue(b:rmine_cache.id - 1)<CR>
+    "nnoremap <silent> <buffer> <C-b> :call rmine#issue(b:rmine_cache.id + 1)<CR>
     nnoremap <silent> <buffer> <Leader>s :call rmine#buffer#note()<CR>
     nnoremap <silent> <buffer> <Leader>b :call rmine#open_browser(b:rmine_cache.id)<CR>
   augroup END
