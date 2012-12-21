@@ -38,6 +38,7 @@ function! s:create_header(issue)
         \ 'status      : ' . issue.status.name,
         \ 'tracker     : ' . issue.tracker.name,
         \ 'priority    : ' . issue.priority.name,
+        \ 'category    : ' . get(issue, 'category'  , {'name' : ''}).name,
         \ 'start_date  : ' . get(issue, 'start_date', ''),
         \ 'due_date    : ' . get(issue, 'due_date'  , ''),
         \ 'done_ratio  : ' . issue.done_ratio,

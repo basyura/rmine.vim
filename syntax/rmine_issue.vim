@@ -23,8 +23,8 @@ syntax region rmine_pre  keepend start="<pre\>" end="</pre>" contains=rmine_code
 hi def link rmine_title_h2 Underlined
 hi def link rmine_title_h3 Underlined
 hi def link rmine_comments Underlined
-hi def link rmine_note_author_separator Comment
 hi def link rmine_quote    Comment
+hi rmine_note_author_separator guifg=#80a0ff
 hi rmine_pre guifg=orange
 hi rmine_pre_start guifg=#6A6A6A
 hi rmine_pre_end guifg=#6A6A6A
