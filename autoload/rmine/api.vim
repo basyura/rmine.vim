@@ -134,7 +134,7 @@ function! s:request(method, path, data, option)
     let option['key'] = g:rmine_access_key
   endif
 
-  let url   = s:server_url() . path . '.json'
+  let url   = rmine#server_url() . path . '.json'
   let param = webapi#http#encodeURI(option)
   if strlen(param)
     let url .= "?" . param
@@ -159,9 +159,4 @@ function! s:request(method, path, data, option)
   else
     return webapi#json#decode(ret.content)
   endif
-endfunction
-
-
-function! s:server_url()
-  return substitute(g:rmine_server_url , '/$' , '' , '')
 endfunction

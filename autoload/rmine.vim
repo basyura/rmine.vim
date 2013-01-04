@@ -20,10 +20,11 @@ function! rmine#issue(no)
 endfunction
 
 function! rmine#open_browser(no)
-  let url = s:server_url() . '/issues/' . a:no
+  let url = rmine#server_url() . '/issues/' . a:no
   execute "OpenBrowser " . url
 endfunction
 
-function! s:server_url()
-  return substitute(g:rmine_server_url , '/$' , '' , '')
+function! rmine#server_url()
+  let url = get(g:, 'rmine_server_url', 'http://localhost:3000')
+  return substitute(url , '/$' , '' , '')
 endfunction
