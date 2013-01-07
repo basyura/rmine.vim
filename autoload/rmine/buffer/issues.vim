@@ -23,9 +23,9 @@ function! s:load(issues)
   :0
 
   call append(0, title)
-  call append(1, tweetvim#util#separator('~'))
+  call append(1, rmine#util#separator('~'))
 
-  let separator    = tweetvim#util#separator('-')
+  let separator    = rmine#util#separator('-')
   let current_user = rmine#api#current_user()
   let apply_current_user = 0
   for issue in a:issues

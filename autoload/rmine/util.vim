@@ -29,3 +29,21 @@ function! rmine#util#clear_undo()
   unlet old_undolevels
 endfunction
 
+function! rmine#util#separator(s)
+  let max = rmine#util#bufwidth()
+
+  let sep = ""
+  while len(sep) < max
+    let sep .= a:s
+  endwhile
+  return sep
+endfunction
+
+
+function! rmine#util#bufwidth()
+  let width = winwidth(0)
+  if &l:number || &l:relativenumber
+    let width = width - (&numberwidth + 1)
+  endif
+  return width
+endfunction
