@@ -45,7 +45,7 @@ endfunction
 "     'priority_id'     : 4
 "     'project_id'      : 1
 "     'done_ratio'      : 0,
-"     'subject'         : 'あ', 
+"     'subject'         : 'あ',
 "     'description'     : 'いいいいいいいいいいいいい',
 "     'assigned_to_id'  : 1,
 "     'start_date'      : '2012-11-23',
@@ -147,8 +147,12 @@ function! s:request(method, path, data, option)
     let ret  = webapi#http#post(url, data, {'Content-Type' : 'application/json'} , toupper(a:method))
   endif
 
-  let status = substitute(ret.header[0], 'HTTP/1.\d ', '', '')
-  let status = substitute(status, ' .*', '', '')
+  if exists('ret.status')
+    let status = ret.status
+  else
+    let status = substitute(ret.header[0], 'HTTP/1.\d ', '', '')
+    let status = substitute(status, ' .*', '', '')
+  endif
   if index(['200', '201'], status) < 0
     throw ret.header[0]
   endif
